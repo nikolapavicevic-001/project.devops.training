@@ -1,5 +1,5 @@
 version: v1.0
-name: "\U0001F40D CI Pipeline"
+name: CI Pipeline
 agent:
   machine:
     type: f1-standard-2
@@ -13,37 +13,37 @@ global_job_config:
       - cache restore
       - pip install --cache-dir .pip_cache -r requirements.txt
 blocks:
-  - name: "\U0001F6E0️ Setup and Cachee"
+  - name: Setup and Cache
     dependencies: []
     task:
       jobs:
-        - name: "\U0001F4E6 Install Dependencies"
+        - name: Install Dependencies
           commands:
             - cache store
-  - name: "\U0001F50D Code Quality"
+  - name: Lint
     dependencies:
-      - "\U0001F6E0️ Setup and Cachee"
+      - Setup and Cache
     task:
       jobs:
-        - name: ✨ Lint and Format
+        - name: Lint
           commands:
-            - make lint
-  - name: "\U0001F9EA Test Suite"
+            - pylint src
+  - name: Dependency security scanning
     dependencies:
-      - "\U0001F6E0️ Setup and Cachee"
-    task:
-      env_vars: []
-      jobs:
-        - name: "\U0001F7E2 Pytest"
-          commands:
-            - make test
-  - name: Build
-    dependencies:
-      - "\U0001F50D Code Quality"
-      - "\U0001F9EA Test Suite"
+      - Lint
     task:
       jobs:
-        - name: Build
+        - name: Dependency security scanning
           commands:
-            - make build
-            - artifact push workflow build/
+            - pip install pip-audit
+            - pip-audit -r requirements.txt
+  - name: Generate SBOM
+    dependencies:
+      - Dependency security scanning
+    task:
+      jobs:
+        - name: Generate SBOM
+          commands:
+            - pip install cyclonedx-bom
+            - cyclonedx-py requirements -o bom.json
+            - artifact push workflow bom.json
