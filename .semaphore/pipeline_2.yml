@@ -1,0 +1,13 @@
+version: v1.0
+name: Build Docker image
+agent:
+  machine:
+    type: f1-standard-2
+    os_image: ubuntu2004
+blocks:
+  - name: Build Docker Image
+    task:
+      jobs:
+        - name: Build Docker Image
+          commands:
+            - echo "job 1"
