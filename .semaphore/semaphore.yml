@@ -36,6 +36,8 @@ blocks:
       jobs:
         - name: Dependency security scanning
           commands:
+            - apt update
+            - apt install -y python3.12-venv
             - pip install pip-audit
             - pip-audit -r requirements.txt
   - name: Generate SBOM
