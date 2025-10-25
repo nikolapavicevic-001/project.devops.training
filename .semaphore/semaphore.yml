@@ -27,6 +27,7 @@ blocks:
       jobs:
         - name: Lint
           commands:
+            - pip install pylint
             - pylint src
   - name: Dependency security scanning
     dependencies:
