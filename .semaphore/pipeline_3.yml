@@ -19,7 +19,7 @@ blocks:
             - kubectl config set-context --current --namespace="nikola-pavicevic"
             - kubectl apply -f deployment.yml
             - kubectl apply -f service.yml
-            - kubectl rollout status deployment/my-app
-            - kubectl get svc my-app
+            - kubectl rollout status deployment/myapp
+            - kubectl get svc myapp
       secrets:
         - name: kubeconfig
