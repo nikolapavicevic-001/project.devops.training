@@ -10,4 +10,9 @@ blocks:
       jobs:
         - name: Build Docker Image
           commands:
-            - echo "job 1"
+            - echo $DOCKER_PASSWORD | docker login --username "$DOCKER_USERNAME" --password-stdin
+            - 'docker build -t devops-project:${SEMAPHORE_WORKFLOW_ID} .'
+            - 'docker tag devops-project:${SEMAPHORE_WORKFLOW_ID} "$DOCKER_USERNAME"/devops-project'
+            - docker push "$DOCKER_USERNAME"/devops-project
+      secrets:
+        - name: DockerHub
