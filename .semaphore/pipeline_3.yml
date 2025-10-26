@@ -1,0 +1,23 @@
+version: v1.0
+name: Pipeline 3
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+global_job_config:
+  prologue:
+    commands:
+      - checkout
+blocks:
+  - name: Deploy
+    task:
+      jobs:
+        - name: Deploy
+          commands:
+            - cd deploy/
+            - kubectl create namespace "nikola-pavicevic" || true
+            - kubectl config set-context --current --namespace="nikola-pavicevic"
+            - kubectl apply -f deployment.yml
+            - kubectl apply -f service.yml
+            - kubectl rollout status deployment/my-app
+            - kubectl get svc my-app
