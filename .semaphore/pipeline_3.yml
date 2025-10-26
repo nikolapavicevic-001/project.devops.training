@@ -17,6 +17,7 @@ blocks:
             - cd deploy/
             - kubectl create namespace "nikola-pavicevic" || true
             - kubectl config set-context --current --namespace="nikola-pavicevic"
+            - 'sed -i "s|image: legionalac/devops-project:.*|image: legionalac/devops-project:${SEMAPHORE_WORKFLOW_ID}|" deployment.yml'
             - kubectl apply -f deployment.yml
             - kubectl apply -f service.yml
             - kubectl rollout status deployment/myapp
