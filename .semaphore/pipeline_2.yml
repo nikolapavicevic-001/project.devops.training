@@ -4,6 +4,10 @@ agent:
   machine:
     type: f1-standard-2
     os_image: ubuntu2004
+global_job_config:
+  prologue:
+    commands:
+      - checkout
 blocks:
   - name: Build Docker Image
     task:
